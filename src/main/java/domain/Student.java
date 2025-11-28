@@ -4,47 +4,21 @@ import domain.validation.Validator;
 
 import java.util.UUID;
 
-public class Student {
-    private final UUID id;
-    private final String name;
-    private final String nameGroup;
-    private final Role role;
-    private final String passwordHash;
+public class Student extends User {
+    private final String group;
 
-
-    public Student(String name, String nameGroup,String passwordHash) {
-        this.role = Role.STUDENT;
-        this.passwordHash = passwordHash;
-        this.id = UUID.randomUUID();
-        this.name = Validator.validate(name);
-        this.nameGroup = nameGroup;
+    public Student(String name, String group, String passwordHash) {
+        super(name, Role.STUDENT, passwordHash);
+        this.group = group;
     }
 
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getNameGroup() {
-        return nameGroup;
-    }
-
-    public Role getRole() {
-        return role;
+    public String getGroup() {
+        return group;
     }
 
     @Override
     public String toString() {
-        return "Имя '" + name + '\'' +
-               ", Группа '" + nameGroup + '\n';
-
+        return "Студент " + getName() + " (группа: " + group + ")";
     }
+
 }

@@ -2,6 +2,7 @@ package service;
 
 import domain.Student;
 import domain.Teacher;
+import domain.User;
 import repository.PasswordRepository;
 
 public class AuthorizationService {
@@ -12,31 +13,19 @@ public class AuthorizationService {
     }
 
 
-    public boolean authorizationStudent(String login, String password) {
-        Student student1 = passwordRepository.getStudent(login);
-        if (student1.getPasswordHash().equals(password)) {
+    public boolean authorization(String login, String password) {
+        User user = passwordRepository.getUserLogin(login);
+        if (user.getPasswordHash().equals(password)) {
             return true;
         }
         return false;
     }
-
-    public Student getStud(String name) {
-        return passwordRepository.getStudent(name);
+//возврат по логину
+    public User getUser(String login) {
+        return passwordRepository.getUserLogin(login);
     }
-
-    public boolean authorizationTeacher(String login, String password) {
-        Teacher teacher1 = passwordRepository.getTeacher(login);
-        if (teacher1.getPasswordHash().equals(password)) {
-            return true;
-        }
-        return false;
-    }
-
-    public Teacher getTeacher(String login) {
-        return passwordRepository.getTeacher(login);
-    }
-
-    public Student getStudName(String name) {
-        return passwordRepository.getNameStudent(name);
-    }
+//что это
+  //  public User getUserName(String name) {
+    //    return passwordRepository.getNameUser(name);
+    //}
 }

@@ -4,11 +4,11 @@ import domain.Exceptions.DomainException;
 
 public class Validator {
 
+
     public static String validate(String name) {
         if (name == null || name.isBlank()) {
             throw new DomainException("Имя не может быть пустым");
         }
-
         String normalized = name.trim().replaceAll("\\s+", " ");
 
         if (normalized.length() < 2) {

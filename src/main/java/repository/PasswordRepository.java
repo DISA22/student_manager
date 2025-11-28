@@ -2,6 +2,7 @@ package repository;
 
 import domain.Student;
 import domain.Teacher;
+import domain.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,66 +10,40 @@ import java.util.List;
 import java.util.Map;
 
 public class PasswordRepository {
-    private final Map<String, Student> mapStudentPas = new HashMap<>();
-    private final Map<String, Teacher> mapTeacherPas = new HashMap<>();
 
-    public boolean addStudent(String login, String password, Student student) {
-        if (mapStudentPas.containsKey(login)) {
+    private final Map<String, User> mapUserPass = new HashMap<>();
+
+    public boolean addUser(String login, String password, User user) {
+        if (mapUserPass.containsKey(login)) {
             return false;
+        } else {
+            mapUserPass.put(login, user);
+            return true;
         }
-        mapStudentPas.put(login, student);
-        return true;
     }
 
-    public boolean addTeacher(String login, String password, Teacher teacher) {
-        if (mapTeacherPas.containsKey(login)) {
-            return false;
-        }
-        mapTeacherPas.put(login, teacher);
-        return true;
-    }
-
-
-    public void removeStudent(String login) {
+    public void removeUser(String login) {
         if (login != null) {
-            mapStudentPas.remove(login);
+            mapUserPass.remove(login);
         }
     }
 
-
-    public void removeTeacher(String login) {
-        if (login != null) {
-            mapTeacherPas.remove(login);
-        }
+    public User getUserLogin(String login) {
+        return mapUserPass.get(login);
     }
 
 
-    public Student getStudent(String login) {
-        return mapStudentPas.get(login);
+    public List<User> getAllUser() {
+        return new ArrayList<>(mapUserPass.values());
     }
 
 
-    public Teacher getTeacher(String login) {
-        return mapTeacherPas.get(login);
-    }
-
-
-    public List<Student> getAllStudents() {
-        return new ArrayList<>(mapStudentPas.values());
-    }
-
-
-    public List<Teacher> getAllTeachers() {
-        return new ArrayList<>(mapTeacherPas.values());
-    }
-
-
-    public Student getNameStudent(String name) {
-        for (Map.Entry<String, Student> entry : mapStudentPas.entrySet()) {
+    public User getUserName(String name) {
+        for (Map.Entry<String, User> entry : mapUserPass.entrySet()) {
             String key = entry.getKey();
-            Student student = entry.getValue();
-            if (student.getName().equals(name)) {
-                return student;
+            User user = entry.getValue();
+            if (user.getName().equals(name)) {
+                return user;
             }
         }
         return null;

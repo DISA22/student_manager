@@ -3,6 +3,8 @@ package service;
 import domain.Lesson;
 import domain.Schedule;
 import domain.Student;
+import domain.User;
+import repository.PasswordRepository;
 import repository.StudentScheduleRepository;
 import repository.exception.ScheduleAndGradeServiceException;
 
@@ -15,11 +17,30 @@ public class ScheduleAndGradeService {
     private final StudentScheduleRepository studentScheduleRepository;
     private final Schedule schedule; // пришлось сделать потому что общее расписание
     private Scanner scanner = new Scanner(System.in);
+    private final PasswordRepository passwordRepository;
 
 
-    public ScheduleAndGradeService(StudentScheduleRepository studentScheduleRepository, Schedule schedule) {
+    public ScheduleAndGradeService(StudentScheduleRepository studentScheduleRepository, Schedule schedule, PasswordRepository passwordRepository) {
         this.studentScheduleRepository = studentScheduleRepository;
         this.schedule = schedule;
+        this.passwordRepository = passwordRepository;
+    }
+
+    //показать всех зарегистрированных пользователей
+    public void infoAllUsers() {
+        List<User> users = passwordRepository.getAllUser();
+        StringBuilder sb = new StringBuilder();
+
+        for (User user : users) {
+            sb.append("ID: ").append(user.getId())
+                    .append(" | Имя: ").append(user.getName())
+                    .append(" | Роль: ").append(user.getRole())
+                    .append(" | Hash: ").append(user.getPasswordHash().substring(0, 8)).append("...")
+                    .append("\n");
+        }
+
+        System.out.println(sb.toString());
+        System.out.println("Всего пользователей: " + users.size());
     }
 
     //обновляем общее расписание
@@ -28,19 +49,19 @@ public class ScheduleAndGradeService {
     }
 
     //связываем студента с его расписанием
-    public void addStudentWithSchedules(Student student, Schedule schedule) {
-        if (student == null || schedule == null) {
+    public void addStudentWithSchedules(User user, Schedule schedule) {
+        if (user == null || schedule == null) {
             throw new ScheduleAndGradeServiceException("Студент и расписание не могут быть пусты");
         }
-        UUID id = student.getId();
+        UUID id = user.getId();
         studentScheduleRepository.save(id, schedule.getSchedules());
     }
 
     //поменять расписание у студента
-    public void changeSchedule(Student student) {
+    public void changeSchedule(User user) {
         // List<Lesson> lessons = studentScheduleRepository.getStudentSchedule(student.getId());
         List<Lesson> nowLessons = createLessonsFromInput();
-        studentScheduleRepository.save(student.getId(), nowLessons);
+        studentScheduleRepository.save(user.getId(), nowLessons);
     }
 
     //новое расписание
@@ -55,8 +76,8 @@ public class ScheduleAndGradeService {
     }
 
     //изменение оценки
-    public void updateStudentGrade(Student student) {
-        List<Lesson> lessons = studentScheduleRepository.getStudentSchedule(student.getId());
+    public void updateStudentGrade(User user) {
+        List<Lesson> lessons = studentScheduleRepository.getStudentSchedule(user.getId());
         if (lessons.isEmpty()) {
             System.out.println("У студента нет предметов в расписании");
             return;
@@ -90,33 +111,33 @@ public class ScheduleAndGradeService {
         if (!found) {
             System.out.printf("Предмет '%s' не найден в расписании\n", subject);
         }
-        studentScheduleRepository.save(student.getId(), lessons);
+        studentScheduleRepository.save(user.getId(), lessons);
     }
 
     //Удаление студента
-    public void removeStudent(Student student) {
-        if (student != null) {
-            studentScheduleRepository.removal(student.getId());
+    public void removeStudent(User user) {
+        if (user != null) {
+            studentScheduleRepository.removal(user.getId());
         }
     }
 
 
     //удаление предмета в расписании у студента
-    public void removeLessonUsingYourMethod(Student student) {
-        List<Lesson> lessons = studentScheduleRepository.getStudentSchedule(student.getId());
+    public void removeLessonUsingYourMethod(User user) {
+        List<Lesson> lessons = studentScheduleRepository.getStudentSchedule(user.getId());
         if (lessons == null || lessons.isEmpty()) {
             System.out.println("У студента нет расписания");
             return;
         }
-        infoSchedule(student);//
+        infoSchedule(user);//
         System.out.print("\n Введите предмет для удаления: ");
         String subjectToRemove = scanner.nextLine().trim();
-        studentScheduleRepository.removeLesson(student.getId(), subjectToRemove);
+        studentScheduleRepository.removeLesson(user.getId(), subjectToRemove);
     }
 
     //расписание студента
-    public void infoSchedule(Student student) {
-        List<Lesson> lessons = studentScheduleRepository.getStudentSchedule(student.getId());
+    public void infoSchedule(User user) {
+        List<Lesson> lessons = studentScheduleRepository.getStudentSchedule(user.getId());
 
         if (lessons == null || lessons.isEmpty()) {
             System.out.println(" У студента нет расписания");

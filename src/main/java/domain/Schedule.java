@@ -46,7 +46,7 @@ public class Schedule {
     }
 
     //безапасное удаление
-    public void delLesson(String name) {
+    public void deliteLesson(String name) {
         Iterator<Lesson> iterator = schedules.iterator();
         while (iterator.hasNext()) {
             Lesson lesson1 = iterator.next();

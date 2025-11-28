@@ -17,7 +17,7 @@ public class Main {
         RegistrationService registrationService = new RegistrationService(passwordRepository, studentScheduleRepository);
         Schedule schedule = new Schedule();
         AuthorizationService authorizationService = new AuthorizationService(passwordRepository);
-        ScheduleAndGradeService scheduleAndGradeService = new ScheduleAndGradeService(studentScheduleRepository, schedule);
+        ScheduleAndGradeService scheduleAndGradeService = new ScheduleAndGradeService(studentScheduleRepository,schedule,passwordRepository);
         ConsoleUI consoleUI = new ConsoleUI(registrationService, authorizationService, scheduleAndGradeService);
         consoleUI.start();
     }
