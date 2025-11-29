@@ -154,4 +154,9 @@ public class ScheduleAndGradeService {
             );
         }
     }
+
+    //общее расписание
+    public void allSchedule() {
+        schedule.getSchedules();
+    }
 }
