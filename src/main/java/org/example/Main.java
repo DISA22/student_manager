@@ -3,6 +3,7 @@ import domain.Schedule;
 import repository.PasswordRepository;
 import repository.StudentScheduleRepository;
 import service.AuthorizationService;
+import service.FileService;
 import service.RegistrationService;
 import service.ScheduleAndGradeService;
 import ui.ConsoleUI;
@@ -16,9 +17,11 @@ public class Main {
         StudentScheduleRepository studentScheduleRepository = new StudentScheduleRepository();
         RegistrationService registrationService = new RegistrationService(passwordRepository, studentScheduleRepository);
         Schedule schedule = new Schedule();
+        FileService fileService = new FileService(passwordRepository,studentScheduleRepository,schedule);
         AuthorizationService authorizationService = new AuthorizationService(passwordRepository);
         ScheduleAndGradeService scheduleAndGradeService = new ScheduleAndGradeService(studentScheduleRepository,schedule,passwordRepository);
-        ConsoleUI consoleUI = new ConsoleUI(registrationService, authorizationService, scheduleAndGradeService);
+        ConsoleUI consoleUI = new ConsoleUI(registrationService, authorizationService, scheduleAndGradeService,fileService);
+        fileService.inUsersToBs();
         consoleUI.start();
     }
 }

@@ -1,5 +1,6 @@
 package service;
 
+import domain.Role;
 import domain.Student;
 import domain.Teacher;
 import domain.User;
@@ -20,12 +21,17 @@ public class AuthorizationService {
         }
         return false;
     }
-//возврат по логину
+
+    //возврат по логину
     public User getUser(String login) {
         return passwordRepository.getUserLogin(login);
     }
-//что это
-  //  public User getUserName(String name) {
-    //    return passwordRepository.getNameUser(name);
-    //}
+
+    public User getUserStudName(String name) {
+        User user = passwordRepository.getOnliStudName(name);
+        if (user.getRole().equals(Role.STUDENT)) {
+            return user;
+        }
+        return null;
+    }
 }

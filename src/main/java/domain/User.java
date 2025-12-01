@@ -33,4 +33,11 @@ public abstract class User {
     public Role getRole() {
         return role;
     }
+
+    public String toString() {
+        return String.format(
+                "User{\n  id=%-10d\n  name='%-20s'\n  role=%-15s\n  passwordHash='%s'\n}",
+                id, name, role, passwordHash
+        );
+    }
 }

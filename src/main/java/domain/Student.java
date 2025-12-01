@@ -16,9 +16,10 @@ public class Student extends User {
         return group;
     }
 
-    @Override
     public String toString() {
-        return "Студент " + getName() + " (группа: " + group + ")";
+        return String.format(
+                "Студент id=%s name=%s role=%s group=%s passwordHash=%s",
+                getId(), getName(), getRole(), getGroup(), getPasswordHash()
+        );
     }
-
 }

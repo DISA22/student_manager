@@ -2,6 +2,7 @@ package ui;
 
 import domain.*;
 import service.AuthorizationService;
+import service.FileService;
 import service.RegistrationService;
 import service.ScheduleAndGradeService;
 import ui.validation.ConsoleValidation;
@@ -14,11 +15,13 @@ public class ConsoleUI {
     private final RegistrationService registrationService;
     private final AuthorizationService authorizationService;
     private final ScheduleAndGradeService scheduleAndGradeService;
+    private final FileService fileService;
 
-    public ConsoleUI(RegistrationService registrationService, AuthorizationService authorizationService, ScheduleAndGradeService scheduleAndGradeService) {
+    public ConsoleUI(RegistrationService registrationService, AuthorizationService authorizationService, ScheduleAndGradeService scheduleAndGradeService, FileService fileService) {
         this.registrationService = registrationService;
         this.authorizationService = authorizationService;
         this.scheduleAndGradeService = scheduleAndGradeService;
+        this.fileService = fileService;
     }
 
     public void start() {
@@ -130,71 +133,92 @@ public class ConsoleUI {
 
 
     public void showStudentMenu(Student student) {
-        System.out.println("Посмотреть расписание введите цифру 1");
+        System.out.println("1)Посмотреть расписание общее");
+        System.out.println("2)Посмотреть расписание");
         String number = scanner.nextLine();
-        if (number.equals("1")) {
-            scheduleAndGradeService.infoSchedule(student);
+        switch (number) {
+            case "1":
+                scheduleAndGradeService.allSchedule();
+                break;
+            case "2":
+                scheduleAndGradeService.infoSchedule(student);
+                break;
         }
     }
 
     public void showTeacherMenu(Teacher teacher) {
-        System.out.println("Введите цифру из меню");
-        System.out.println("---------------------------------------");
-        System.out.println("1)Создать расписание общее");
-        System.out.println("2)Добавить расписание к студенту");
-        System.out.println("3)Поменять расписание у студента");
-        System.out.println("4)Изменить оценку у студента");
-        System.out.println("5)Удалить студента с расписанием");
-        System.out.println("6)Удаление предмета в расписании у студента");
-        System.out.println("7)Показать всех зарегистрированных пользователей");
-        String number = scanner.nextLine().trim();
+        while (true) {
+            System.out.println("Введите цифру из меню");
+            System.out.println("---------------------------------------");
+            System.out.println("1)Создать расписание общее");
+            System.out.println("2)Добавить расписание к студенту");
+            System.out.println("3)Поменять расписание у студента");
+            System.out.println("4)Изменить оценку у студента");
+            System.out.println("5)Удалить студента с расписанием");
+            System.out.println("6)Удаление предмета в расписании у студента");
+            System.out.println("7)Показать всех зарегистрированных пользователей");
+            System.out.println("8)Выгрузить всех зарегестрированных в файл");
+            System.out.println("9)Выгрузить общее расписание в файл");
+            System.out.println("10)Выгрузить расписание с студентами");
+            System.out.println("0)Выйти из меню учителя");
 
-        switch (number) {
-            case "1":
-                System.out.println("Создать расписание общее");
-                List<Lesson> lessons = scheduleAndGradeService.createLessonsFromInput();
-                scheduleAndGradeService.createSchedule(lessons);
+            String number = scanner.nextLine().trim();
+            if (number.equals("0")) {
                 break;
-            case "2":
-                System.out.println("Добавить расписание к студенту");
-                System.out.print("Введите имя студента: ");
-                String name = names();
-                User user = authorizationService.getUser(name);
-                System.out.println("Введите предметы для расписания студента через пробел ");
-                List<Lesson> lessons1 = scheduleAndGradeService.createLessonsFromInput();
-                Schedule schedule = new Schedule();
-                schedule.addNewSchedules(lessons1);
-                scheduleAndGradeService.addStudentWithSchedules(user, schedule);
-                break;
+            }
+            switch (number) {
+                case "1":
+                    System.out.println("Создать расписание общее");
+                    List<Lesson> lessons = scheduleAndGradeService.createLessonsFromInput();
+                    scheduleAndGradeService.createSchedule(lessons);
+                    break;
+                case "2":
+                    System.out.println("Добавить расписание к студенту");
+                    System.out.print("Введите имя студента: ");
+                    String name = names();
+                    User user = authorizationService.getUserStudName(name);
+                    System.out.println("Введите предметы для расписания студента через пробел ");
+                    List<Lesson> lessons1 = scheduleAndGradeService.createLessonsFromInput();
+                    Schedule schedule = new Schedule();
+                    schedule.addNewSchedules(lessons1);
+                    scheduleAndGradeService.addStudentWithSchedules(user, schedule);
+                    break;
 
-            case "3":
-                System.out.println("Поменять расписание у студента");
-                System.out.print("Введите имя студента: ");
-                User user1 = authorizationService.getUser(names());
-                scheduleAndGradeService.changeSchedule(user1);
-                break;
-            case "4":
-                System.out.println("Изменить оценку у студента");
-                System.out.print("Введите имя студента: ");
-                User user2 = authorizationService.getUser(names());
-                scheduleAndGradeService.updateStudentGrade(user2);
-                break;
-            case "5":
-                System.out.println("Удалить студента с расписанием");
-                System.out.print("Введите имя студента: ");
-                User user3 = authorizationService.getUser(names());
-                scheduleAndGradeService.removeStudent(user3);
-                break;
-            case "6":
-                System.out.println("Удаление предмета в расписании у студента");
-                System.out.print("Введите имя студента: ");
-                User user4 = authorizationService.getUser(names());
-                scheduleAndGradeService.removeLessonUsingYourMethod(user4);
-                break;
-            case "7":
-               scheduleAndGradeService.infoAllUsers();
+                case "3":
+                    System.out.println("Поменять расписание у студента");
+                    System.out.print("Введите имя студента: ");
+                    User user1 = authorizationService.getUserStudName(names());
+                    scheduleAndGradeService.changeSchedule(user1);
+                    break;
+                case "4":
+                    System.out.println("Изменить оценку у студента");
+                    System.out.print("Введите имя студента: ");
+                    User user2 = authorizationService.getUserStudName(names());
+                    scheduleAndGradeService.updateStudentGrade(user2);
+                    break;
+                case "5":
+                    System.out.println("Удалить студента с расписанием");
+                    System.out.print("Введите имя студента: ");
+                    User user3 = authorizationService.getUserStudName(names());
+                    scheduleAndGradeService.removeStudent(user3);
+                    break;
+                case "6":
+                    System.out.println("Удаление предмета в расписании у студента");
+                    System.out.print("Введите имя студента: ");
+                    User user4 = authorizationService.getUserStudName(names());
+                    scheduleAndGradeService.removeLessonUsingYourMethod(user4);
+                    break;
+                case "7":
+                    scheduleAndGradeService.infoAllUsers();
+                    break;
+                case "8":
+                    fileService.saveUsersToFile();
+                case "9":
+                    fileService.saveToFileSchedule();
+                case "10":
+                    fileService.saveUserScheduleToFile();
+            }
         }
-
     }
 
     public String names() {

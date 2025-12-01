@@ -1,5 +1,6 @@
 package repository;
 
+import domain.Role;
 import domain.Student;
 import domain.Teacher;
 import domain.User;
@@ -37,13 +38,23 @@ public class PasswordRepository {
         return new ArrayList<>(mapUserPass.values());
     }
 
-
-    public User getUserName(String name) {
+//отдает только студентов
+    public User getOnliStudName(String name) {
         for (Map.Entry<String, User> entry : mapUserPass.entrySet()) {
             String key = entry.getKey();
             User user = entry.getValue();
-            if (user.getName().equals(name)) {
+            if (user.getName().equals(name)&& user.getRole().equals(Role.STUDENT)) {
                 return user;
+            }
+        }
+        return null;
+    }
+
+
+    public String getKey(User user) {
+        for (Map.Entry<String, User> map : mapUserPass.entrySet()) {
+            if (map.getValue().equals(user)) {
+                return map.getKey();
             }
         }
         return null;

@@ -10,8 +10,10 @@ public class Teacher extends User {
         super(name, Role.TEACHER, passwordHash);
     }
 
-    @Override
     public String toString() {
-        return "Перподаватель " + getName();
+        return String.format(
+                "Учитель id=%s name=%s role=%s passwordHash=%s",
+                getId(), getName(), getRole(), getPasswordHash()
+        );
     }
 }
