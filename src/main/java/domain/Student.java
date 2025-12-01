@@ -1,9 +1,12 @@
 package domain;
 
 import domain.validation.Validator;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.UUID;
-
+@ToString
+@Getter
 public class Student extends User {
     private final String group;
 
@@ -12,14 +15,4 @@ public class Student extends User {
         this.group = group;
     }
 
-    public String getGroup() {
-        return group;
-    }
-
-    public String toString() {
-        return String.format(
-                "Студент id=%s name=%s role=%s group=%s passwordHash=%s",
-                getId(), getName(), getRole(), getGroup(), getPasswordHash()
-        );
-    }
 }
