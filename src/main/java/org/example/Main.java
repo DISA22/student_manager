@@ -21,7 +21,7 @@ public class Main {
         AuthorizationService authorizationService = new AuthorizationService(passwordRepository);
         ScheduleAndGradeService scheduleAndGradeService = new ScheduleAndGradeService(studentScheduleRepository,schedule,passwordRepository);
         ConsoleUI consoleUI = new ConsoleUI(registrationService, authorizationService, scheduleAndGradeService,fileService);
-        fileService.inUsersToBs();
+        //fileService.inUsersToBs();
         consoleUI.start();
     }
 }

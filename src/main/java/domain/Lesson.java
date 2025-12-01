@@ -2,6 +2,10 @@
 package domain;
 
 import domain.validation.Validator;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@Data
 
 public class Lesson {
     private final String name;
@@ -15,25 +19,5 @@ public class Lesson {
     public Lesson(String name) {
         this(name, null);
 
-    }
-
-    public String getEstimation() {
-        return estimation;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setEstimation(String estimation) {
-        this.estimation = estimation;
-    }
-
-    public String toString() {
-        return new StringBuilder()
-                .append("\n")
-                .append(name)
-                .append(estimation != null ? " Оценка: " + estimation : " (нет оценки)")
-                .toString();
     }
 }

@@ -1,8 +1,12 @@
 package domain;
 
 import domain.validation.Validator;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.UUID;
+
+@Data
 
 public abstract class User {
     private final UUID id;
@@ -18,26 +22,5 @@ public abstract class User {
     }
 
 
-    public UUID getId() {
-        return id;
-    }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public String toString() {
-        return String.format(
-                "User{\n  id=%-10d\n  name='%-20s'\n  role=%-15s\n  passwordHash='%s'\n}",
-                id, name, role, passwordHash
-        );
-    }
 }

@@ -1,12 +1,17 @@
 package domain;
 
 import domain.validation.Validator;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+@Data
 
 public class Schedule {
     private final List<Lesson> schedules = new ArrayList<>(); // Просто расписание
@@ -18,17 +23,7 @@ public class Schedule {
         this.updatedAt = this.createdAt;
     }
 
-    public List<Lesson> getSchedules() {
-        return schedules;
-    }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
 
 
     //новое расписание
